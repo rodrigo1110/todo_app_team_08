@@ -1,8 +1,34 @@
-
 <?php
-$connection = mysqli_connect("localhost", "root", "", "todo_app");
+include 'errorHandler.php';
+//$connection = mysqli_connect("localhost", "root", "", "todo_app");
+
+//set_error_handler('errorHandler.customError', E_USER_WARNING);
+// Validação da conexão com o banco de dados
+try {
+    // Tente se conectar ao banco de dados
+    $connection = mysqli_connect("localhost", "root", "", "todo_appp");  // Nome do banco de dados com erro (três 'p's)
+
+    // Verificar se a conexão falhou
+    if (mysqli_connect_errno()) {
+        // Se houver um erro na conexão, lança uma exceção
+        throw new Exception("Erro na conexão com o banco de dados: " . mysqli_connect_error());
+    }
+
+    // Se a conexão for bem-sucedida
+    echo "Conectado com sucesso";
+} catch (Exception $e) {
+    // Exibe a mensagem de erro capturada
+    trigger_error("Erro de conexão", E_USER_WARNING);
+}
+
 $query = "SELECT * FROM tasks";
 $result = mysqli_query($connection, $query);
+
+// Validação da consulta 
+if (!$result) {
+    die("Erro na consulta: " . mysqli_error($connection));
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="pt">
